@@ -1,15 +1,17 @@
 package net.satisfy.candlelight.block;
 
-import daniking.vinery.block.StorageBlock;
-import daniking.vinery.block.entity.StorageBlockEntity;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
@@ -21,6 +23,8 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.satisfy.candlelight.registry.StorageTypes;
+import satisfyu.vinery.block.StorageBlock;
+import satisfyu.vinery.block.entity.StorageBlockEntity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,13 +35,21 @@ public class CakeStandBlock extends StorageBlock {
 
     public static VoxelShape makeShape(){
         VoxelShape shape = VoxelShapes.empty();
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 0.5000625, 0.125, 0.875, 1.0000625, 0.875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 0.5000625, 0.125, 0.125, 1.0000625, 0.875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 0.5000625, 0.125, 0.875, 1.0000625, 0.125));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 0.5000625, 0.875, 0.875, 1.0000625, 0.875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 1.0000625, 0.125, 0.875, 1.0000625, 0.875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.875, 0.5000625, 0.125, 0.875, 1.0000625, 0.875));
         shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.4375, 1, 0.4375, 0.5625, 1.0625, 0.5625));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.4375, 0.1875, 0.4375, 0.5625, 0.5, 0.5625));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.4375, 0.125, 0.4375, 0.5625, 0.4375, 0.5625));
         shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.3125, 0.6875, 0.0625, 0.6875));
-        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.25, 0.4375, 0.25, 0.75, 0.5, 0.75));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.25, 0.375, 0.25, 0.75, 0.4375, 0.75));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 0.4375, 0.125, 0.875, 0.5, 0.875));
         shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.34375, 0.0625, 0.34375, 0.65625, 0.1875, 0.65625));
-
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.875, 0.4375, 0.125, 0.9375, 0.5, 0.875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.0625, 0.4375, 0.125, 0.125, 0.5, 0.875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 0.4375, 0.0625, 0.875, 0.5, 0.125));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.125, 0.4375, 0.875, 0.875, 0.5, 0.9375));
         return shape;
     }
 
@@ -51,7 +63,7 @@ public class CakeStandBlock extends StorageBlock {
     }
 
     public int findFirstEmpty(DefaultedList<ItemStack> inv){
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < size(); i++){
             ItemStack stack = inv.get(i);
             if (stack.isEmpty()) return i;
         }
@@ -59,7 +71,7 @@ public class CakeStandBlock extends StorageBlock {
     }
 
     public int findFirstFull(DefaultedList<ItemStack> inv){
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < size(); i++){
             ItemStack stack = inv.get(i);
             if (!stack.isEmpty()) return i;
         }
@@ -138,5 +150,12 @@ public class CakeStandBlock extends StorageBlock {
     @Override
     public int getSection(Float x, Float y) {
         return 0;
+    }
+
+    @Override
+    public void appendTooltip(ItemStack itemStack, BlockView world, List<Text> tooltip, TooltipContext tooltipContext) {
+        tooltip.add(Text.translatable("block.candlelight.canbeplaced.tooltip").formatted(Formatting.ITALIC, Formatting.GRAY));
+        tooltip.add(Text.translatable("block.candlelight.cakestand.tooltip").formatted(Formatting.ITALIC, Formatting.WHITE));
+        tooltip.add(Text.translatable("block.candlelight.cakestand2.tooltip").formatted(Formatting.ITALIC, Formatting.WHITE));
     }
 }

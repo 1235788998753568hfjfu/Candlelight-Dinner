@@ -2,13 +2,16 @@
   "type": "vinery:pot_cooking",
   "ingredients": [
     {
-      "item": "minecraft:potatoes"
+      "item": "minecraft:potato"
     },
     {
-      "item": "minecraft:potatoes"
+      "item": "minecraft:potato"
     },
     {
-      "item": "minecraft:potatoes"
+      "tag": "vinery:milk"
+    },
+    {
+      "item": "candlelight:butter"
     }
   ],
   "container": {

@@ -3,6 +3,7 @@ package net.satisfy.candlelight.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -10,10 +11,8 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Hand;
+import net.minecraft.text.Text;
+import net.minecraft.util.*;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -24,11 +23,14 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.satisfy.candlelight.registry.ObjectRegistry;
 import org.jetbrains.annotations.Nullable;
+import satisfyu.vinery.util.GeneralUtil;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class JewelryBoxBlock extends Block {
-    private static final VoxelShape SHAPE_S = makeShapeS();
-    private static final VoxelShape SHAPE_E = makeShapeE();
-
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = Properties.OPEN;
     public static final BooleanProperty RING = BooleanProperty.of("ring");
@@ -73,35 +75,29 @@ public class JewelryBoxBlock extends Block {
         builder.add(FACING, OPEN, RING);
     }
 
+    private static final Supplier<VoxelShape> voxelShapeSupplier = () -> {
+        VoxelShape shape = VoxelShapes.empty();
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.3125, 0.6875, 0.125, 0.6875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.625, 0.125, 0.3125, 0.6875, 0.1875, 0.6875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.3125, 0, 0.3125, 0.6875, 0.125, 0.6875));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.375, 0.125, 0.3125, 0.625, 0.1875, 0.375));
+        shape = VoxelShapes.union(shape, VoxelShapes.cuboid(0.375, 0.125, 0.3125, 0.625, 0.1875, 0.375));
+
+        return shape;
+    };
+
+    public static final Map<Direction, VoxelShape> SHAPE = Util.make(new HashMap<>(), map -> {
+        for (Direction direction : Direction.Type.HORIZONTAL.stream().toList()) {
+            map.put(direction, GeneralUtil.rotateShape(Direction.NORTH, direction, voxelShapeSupplier.get()));
+        }
+    });
+
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return switch (state.get(FACING)) {
-            case WEST, EAST -> SHAPE_E;
-            default -> SHAPE_S;
-        };
+        return SHAPE.get(state.get(FACING));
     }
 
-    private static VoxelShape makeShapeS() {
-        VoxelShape shape = VoxelShapes.empty();
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.0625, 0, 0.3125, 0.09375, 0.3125, 0.6875), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.90625, 0, 0.3125, 0.9375, 0.3125, 0.6875), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.09375, 0, 0.3125, 0.90625, 0.3125, 0.34375), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.09375, 0.03125, 0.34375, 0.90625, 0.09375, 0.65625), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.09375, 0, 0.65625, 0.90625, 0.3125, 0.6875), BooleanBiFunction.OR);
 
-        return shape;
-    }
-
-    private static VoxelShape makeShapeE() {
-        VoxelShape shape = VoxelShapes.empty();
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.3125, 0, 0.0625, 0.6875, 0.3125, 0.09375), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.3125, 0, 0.90625, 0.6875, 0.3125, 0.9375), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.65625, 0, 0.09375, 0.6875, 0.3125, 0.90625), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.34375, 0.03125, 0.09375, 0.65625, 0.09375, 0.90625), BooleanBiFunction.OR);
-        shape = VoxelShapes.combine(shape, VoxelShapes.cuboid(0.3125, 0, 0.09375, 0.34375, 0.3125, 0.90625), BooleanBiFunction.OR);
-
-        return shape;
-    }
 
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
@@ -111,5 +107,11 @@ public class JewelryBoxBlock extends Block {
     @Override
     public BlockState mirror(BlockState state, BlockMirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
+    }
+
+    @Override
+    public void appendTooltip(ItemStack itemStack, BlockView world, List<Text> tooltip, TooltipContext tooltipContext) {
+        tooltip.add(Text.translatable("block.candlelight.canbeplaced.tooltip").formatted(Formatting.ITALIC, Formatting.GRAY));
+        tooltip.add(Text.translatable("block.candlelight.jewelry_box.tooltip").formatted(Formatting.ITALIC, Formatting.GRAY));
     }
 }

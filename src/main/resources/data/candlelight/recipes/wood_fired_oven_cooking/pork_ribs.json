@@ -2,16 +2,16 @@
   "type": "vinery:wood_fired_oven_cooking",
   "ingredients": [
     {
-      "item": "minecraft:raw_porkchop"
+      "item": "minecraft:porkchop"
     },
     {
-      "tag": "candlelight_dinner:red_wine"
+      "item": "minecraft:honey_bottle"
     },
     {
-      "tag": "candlelight_dinner:tomato_sauce"
+      "tag": "vinery:red_wine"
     }
   ],
-  "item": "candlelight_dinner:pork_ribs",
-  "count": 3,
-  "experience": 0.35
+  "item": "candlelight:pork_ribs",
+  "count": 4,
+  "experience": 0.75
 }

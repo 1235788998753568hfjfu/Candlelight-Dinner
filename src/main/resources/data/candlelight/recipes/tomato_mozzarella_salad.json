@@ -1,22 +1,25 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        "B##",
-        " L "
-    ],
-    "key": {
-        "#": {
-   	    "item": "candlelight_dinner:mozzarella"
-        },
-        "L": {
-   	    "tag": "candlelight_dinner:tomato"
-        },
-        "B": {
-   	    "item": "candlelight_dinner:tray"
-        }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "B##",
+    "XL "
+  ],
+  "key": {
+    "#": {
+      "item": "candlelight:mozzarella"
     },
-    "result": {
-        "item": "candlelight_dinner:tomato_mozzarella_salat",
-        "count": 2
+    "L": {
+      "tag": "candlelight:tomato"
+    },
+    "B": {
+      "item": "candlelight:tray"
+    },
+    "X": {
+      "item": "candlelight:vinegar"
     }
+  },
+  "result": {
+    "item": "candlelight:tomato_mozzarella_salad",
+    "count": 2
+  }
 }

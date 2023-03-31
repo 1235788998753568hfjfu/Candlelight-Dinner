@@ -2,16 +2,16 @@
   "type": "vinery:wood_fired_oven_cooking",
   "ingredients": [
     {
-      "item": "candlelight_dinner:chocolate"
+      "item": "minecraft:egg"
     },
     {
-      "tag": "minecraft:dough"
+      "item": "minecraft:sugar"
     },
     {
-      "item": "candlelight_dinner:butter"
+      "tag": "vinery:dough"
     }
   ],
-  "item": "candlelight_dinner:bundt_cake",
+  "item": "candlelight:bundt_cake",
   "count": 1,
-  "experience": 0.35
+  "experience": 0.32
 }

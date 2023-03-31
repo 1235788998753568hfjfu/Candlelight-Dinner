@@ -1,14 +1,14 @@
 package net.satisfy.candlelight.client.render.block;
 
-import daniking.vinery.block.entity.StorageBlockEntity;
-import daniking.vinery.client.render.block.StorageTypeRenderer;
-import daniking.vinery.util.ClientUtil;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3f;
+import satisfyu.vinery.block.entity.StorageBlockEntity;
+import satisfyu.vinery.client.render.block.StorageTypeRenderer;
+import satisfyu.vinery.util.ClientUtil;
 
 public class CakeStandRenderer implements StorageTypeRenderer {
     @Override
@@ -19,8 +19,8 @@ public class CakeStandRenderer implements StorageTypeRenderer {
                 matrices.push();
 
                 if (stack.getItem() instanceof BlockItem blockItem) {
-                    matrices.scale(0.5f, 0.5f, 0.5f);
-                    matrices.translate(-0.5f, 1f, -0.5);
+                    matrices.scale(0.65f, 0.65f, 0.65f);
+                    matrices.translate(-0.5f, 0.8f, -0.5);
                     ClientUtil.renderBlockFromItem(blockItem, matrices, vertexConsumers, entity);
                 } else {
                     matrices.scale(0.4f, 0.4f, 0.4f);

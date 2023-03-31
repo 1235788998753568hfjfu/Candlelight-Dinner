@@ -2,17 +2,20 @@
   "type": "vinery:pot_cooking",
   "ingredients": [
     {
-      "tag":  "candlelight:tomato_sauce"
+      "tag":  "vinery:dough"
     },
     {
-      "item": "minecraft:water_bucket"
+      "item": "candlelight:tomato_soup"
     },
     {
-      "tag": "minecraft:dough"
+      "tag": "vinery:wine"
+    },
+    {
+      "item": "candlelight:butter"
     }
   ],
   "container": {
-    "item": "candlelight:tray"
+    "item": "minecraft:bowl"
   },
   "result": {
     "item": "candlelight:pasta",
